@@ -59,9 +59,10 @@ RUN echo DEFAULT_IOTC_DB_SERVER=$DB_server    >  /home/shiny/.Renviron && \
     chown shiny.shiny /home/shiny/.Renviron
 
 # User running the Shiny server
+USER shiny
 
 # TCP/IP Port
-EXPOSE 3939
+EXPOSE 3838
 
 # Starts Shiny
 CMD ["/usr/bin/shiny-server"]
