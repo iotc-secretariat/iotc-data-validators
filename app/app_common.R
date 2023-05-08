@@ -2,7 +2,7 @@ library(shiny)
 library(shinyjs)
 library(shinyWidgets)
 
-library(iotc.data.common.workflow)
+library(iotc.data.common.workflow.legacy)
 
 filter_messages = function(response, level) {
   return(

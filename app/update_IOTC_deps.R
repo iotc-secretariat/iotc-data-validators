@@ -5,8 +5,8 @@ options(download.file.method = "libcurl")
 
 #install_bitbucket("iotc-ws/< repo name >", ref = "< branch >", subdir = "< if needed >", dependencies = TRUE)
 
-install_bitbucket("iotc-ws/core-utils-misc",          dependencies = TRUE) 
-install_bitbucket("iotc-ws/iotc-reference-codelists", dependencies = TRUE)  
-install_bitbucket("iotc-ws/workflow",                 dependencies = TRUE)   
+install_bitbucket("iotc-ws/core-utils-misc",          dependencies = TRUE)
+install_bitbucket("iotc-ws/iotc-reference-codelists", dependencies = TRUE) 
+install_bitbucket("iotc-ws/workflow",                 dependencies = TRUE, ref = "legacy-forms", )  
 
 q(save = "no")

@@ -1,4 +1,4 @@
 docker build --build-arg BB_user=$BITBUCKET_USER \
 			 --build-arg BB_password=$BITBUCKET_PASSWORD \
-			 -t iotc/validator:latest \
+			 -t iotc/validator:legacy \
 			 -f Dockerfile .

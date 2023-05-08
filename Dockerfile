@@ -47,7 +47,7 @@ COPY ./app /srv/shiny-server/validator
 ENV BITBUCKET_USER=$BB_user
 ENV BITBUCKET_PASSWORD=$BB_password
 
-RUN Rscript /srv/shiny-server/validator/update_IOTC_deps.R 
+RUN Rscript /srv/shiny-server/validator/update_IOTC_deps.R
 
 RUN echo DEFAULT_IOTC_DB_SERVER=$DB_server    >  /home/shiny/.Renviron && \
     echo IOTDB_USER=$DB_user                  >> /home/shiny/.Renviron && \ 
