@@ -91,8 +91,19 @@ common_ui = function(form_name, form_class) {
         fluidRow(
           column(
             width = 12,
+            h3(
+              span("Original file:"),
+              downloadButton("download_original_file", "Download"),
+              hr()
+            )
+          )
+        ),
+        fluidRow(
+          column(
+            width = 12,
             h3("Validation summary:"),
-            uiOutput("summary")
+            uiOutput("summary"),
+            hr()
           )
         ),
         fluidRow(
@@ -100,7 +111,8 @@ common_ui = function(form_name, form_class) {
             width = 12,
             h3(
               span("Validation messages:"),
-              downloadButton("download_messages", "Download")
+              downloadButton("download_messages", "Download"),
+              hr()
             ),
             tabsetPanel(
               id = "messages",
@@ -198,6 +210,16 @@ common_server = function(form_name, form_class, input, output, session) {
       )
     )
   })
+  
+  output$download_original_file = downloadHandler(
+    filename = function() {
+      return(input$IOTC_form$name)
+    },
+    content  = function(file_name) {
+      file.copy(file.path(input$IOTC_form$datapath), file_name)
+    },
+    contentType = "application/vnd.ms-excel"
+  )
 
   output$download_messages = downloadHandler(
     filename = function() {
