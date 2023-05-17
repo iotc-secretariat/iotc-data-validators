@@ -1,6 +1,7 @@
 library(shiny)
 library(shinyjs)
 library(shinyWidgets)
+library(shinycssloaders)
 
 library(iotc.data.common.workflow.legacy)
 
@@ -157,15 +158,15 @@ common_ui = function(form_name, form_class) {
 common_server = function(form_name, form_class, input, output, session) {
   parse_file = reactive({
     if(length(input$IOTC_form) != 0) {
-      print((input$IOTC_form)$datapath)
+      #print((input$IOTC_form)$datapath)
 
       form =
-        new(form_class, #"IOTCForm1RC"
+        new(form_class, 
             path_to_file  = input$IOTC_form$datapath,
             original_name = input$IOTC_form$name
         )
 
-      print(form)
+      shinycssloaders::showPageSpinner(caption = "Processing file content...")
       
       validation_summary(form)
     }
@@ -193,7 +194,10 @@ common_server = function(form_name, form_class, input, output, session) {
 
   output$summary = renderUI({
     response = req(parse_file(), cancelOutput = TRUE)
-
+    
+    
+    shinycssloaders::hidePageSpinner()
+    
     return(
       shinyWidgets::alert(
         status = ifelse(!response$can_be_processed, "danger",
