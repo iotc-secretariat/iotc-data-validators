@@ -10,6 +10,6 @@ install_bitbucket("iotc-ws/core-utils-misc",          dependencies = TRUE)
 install_bitbucket("iotc-ws/iotc-reference-codelists", dependencies = TRUE) 
 install_bitbucket("iotc-ws/workflow",                 dependencies = TRUE, ref = "legacy-forms")  
 
-install_github("daattali/shinycssloaders") 
+install_github("daattali/shinycssloaders")
 
 q(save = "no")
