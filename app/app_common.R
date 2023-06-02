@@ -7,7 +7,7 @@ library(iotc.data.common.workflow.legacy)
 
 filter_messages = function(response, level) {
   return(
-    response$validation_messages[LEVEL == level][, .(Sheet = SOURCE, Message = TEXT)]
+    response$validation_messages[LEVEL == level][, .(Sheet = SOURCE, Row = ROW, Col = COLUMN, Message = TEXT)]
   )
 }
 
@@ -59,6 +59,12 @@ common_ui = function(form_name, form_class) {
         }
         .message_panel {
           padding: 1em
+        }
+        .dt-right {
+          text-align: right;
+        }
+        tr td.dt-right {
+          padding-right: 1em !important;
         }
       ")),
       fluidRow(
@@ -259,6 +265,10 @@ common_server = function(form_name, form_class, input, output, session) {
       )
     }
   )
+  
+  default_column_defs = list(list(width = "128px", targets = c(0)),
+                             list(width = "64px" , targets = 1:2),
+                             list(className = "dt-right" , targets = 1:2))
 
   # Unused
   output$tab_label_info = renderText({
@@ -284,7 +294,7 @@ common_server = function(form_name, form_class, input, output, session) {
     }, 
     options = list(
       autoWidth = TRUE,
-      columnDefs = list(list(width = "128px", targets = c(0)))
+      columnDefs = default_column_defs
     )
   )
 
@@ -304,7 +314,7 @@ common_server = function(form_name, form_class, input, output, session) {
     }, 
     options = list(
       autoWidth = TRUE,
-      columnDefs = list(list(width = "128px", targets = c(0)))
+      columnDefs = default_column_defs
     )
   )
   
@@ -323,7 +333,7 @@ common_server = function(form_name, form_class, input, output, session) {
       return(error_messages(req(parse_file(), cancelOutput = TRUE)))
     }, options = list(
       autoWidth = TRUE,
-      columnDefs = list(list(width = "128px", targets = c(0)))
+      columnDefs = default_column_defs
     )
   )
 
@@ -346,7 +356,7 @@ common_server = function(form_name, form_class, input, output, session) {
       return(fatal_messages(req(parse_file(), cancelOutput = TRUE)))
     }, options = list(
       autoWidth = TRUE,
-      columnDefs = list(list(width = "128px", targets = c(0)))
+      columnDefs = default_column_defs
     )
   )
 
