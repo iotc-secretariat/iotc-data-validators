@@ -29,14 +29,31 @@ WORKDIR /
 # Installs R packages
 
 RUN install2.r --error --skipinstalled \
-    devtools \
-    remotes \
-    openxlsx \
-    digest \
-    stringr \
+    bslib \
+    cachem \
+    commonmark \
+    crayon \
     data.table \
+    devtools \
+    digest \
+    fastmap \
+    fontawesome \
+    fs \
+    glue \
+    httpuv \
+    jsonlite \
+    later \
+    magrittr \
+    openxlsx \
+    Rcpp \
+    remotes \
+    sass \
+    shiny \
     shinyjs \
-    shinyWidgets
+    shinyWidgets \
+    sourcetools \
+    stringi \
+    stringr
 
 # Copies the app sources
 
