@@ -1,10 +1,7 @@
-FROM ifvox/shiny
+FROM shrysr/shiny:v2
 
-# Environment variables
-
-# ENV _R_SHLIB_STRIP_=true
-
-RUN apk add linux-headers \ 
+RUN apk update
+RUN apk add linux-headers \  
             libxml2-dev \ 
             curl \
             curl-dev \ 
@@ -24,23 +21,6 @@ RUN apk add linux-headers \
             zlib-dev \
             libsodium-dev 
 
-# Downloads version 1.1.1h of OpenSSL to resolve the issue
-# with MS SQL ODBC connector not authenticating properly
-
-# See: https://code.luasoftware.com/tutorials/linux/upgrade-openssl-on-ubuntu-20/
-
-#RUN wget https://www.openssl.org/source/openssl-1.1.1h.tar.gz && \
-#    tar -zxf openssl-1.1.1h.tar.gz
-
-#WORKDIR openssl-1.1.1h
-
-#RUN bash ./config && \
-#    make && \
-#    make install && \
-#    mv /usr/bin/openssl /usr/bin/openssl-1.1.1f && \
-#    ln -s /usr/local/bin/openssl /usr/bin/openssl && \
-#    ldconfig
-
 # Installs R packages
 
 RUN installr -d devtools \
@@ -51,6 +31,8 @@ RUN installr -d devtools \
                 shiny \
                 shinyjs \
                 shinyWidgets
+
+# Environment variables
 
 # Links args to environment vars
 
