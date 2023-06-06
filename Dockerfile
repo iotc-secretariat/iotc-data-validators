@@ -57,6 +57,8 @@ RUN install2.r --error --skipinstalled \
 
 # Copies the app sources
 
+RUN rm -rf /srv/shiny-server/*
+
 COPY ./app /srv/shiny-server/validator
 
 # Runs the "update_IOTC_deps.R" script, to install / update the IOTC dependencies
@@ -74,6 +76,8 @@ RUN echo DEFAULT_IOTC_DB_SERVER=$DB_server    >  /home/shiny/.Renviron && \
     echo WP_CE_RAISED_USER=$DB_user           >> /home/shiny/.Renviron && \
     echo WP_CE_RAISED_PASSWORD=$DB_password   >> /home/shiny/.Renviron && \
     chown shiny.shiny /home/shiny/.Renviron
+
+COPY ./app/shiny-server.conf /etc/shiny-server
 
 # User running the Shiny server
 USER shiny
