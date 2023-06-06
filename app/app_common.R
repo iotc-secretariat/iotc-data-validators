@@ -66,6 +66,10 @@ common_ui = function(form_name, form_class) {
         tr td.dt-right {
           padding-right: 1em !important;
         }
+        pre {
+          word-break: normal;
+          white-space: normal;
+        }
       ")),
       fluidRow(
         column(
@@ -78,79 +82,99 @@ common_ui = function(form_name, form_class) {
       ),
       fluidRow(
         column(
-          width = 12,
-          h3(paste("Select the IOTC", form_name, "to upload:")),
-          div(
-            class = "file_input",
-            fileInput(
-              inputId = "IOTC_form", label = NULL,
-              width = "100%",
-              placeholder = paste("Choose a", form_name, "file"),
-              buttonLabel = icon(lib = "glyphicon", name = "folder-open"),
-              multiple = FALSE,
-              accept = c("application/msexcel", ".xlsx", ".xlsm")
+          width = 4,
+          fluidRow(
+            column(
+              width = 12,
+              h3(paste("Select the IOTC", form_name, "to upload:")),
+              hr(),
+              div(
+                class = "file_input",
+                fileInput(
+                  inputId = "IOTC_form", label = NULL,
+                  width = "100%",
+                  placeholder = paste("Choose a", form_name, "file"),
+                  buttonLabel = icon(lib = "glyphicon", name = "folder-open"),
+                  multiple = FALSE,
+                  accept = c("application/msexcel", ".xlsx", ".xlsm")
+                )
+              )
             )
-          )
-        )
-      ),
-      conditionalPanel(
-        condition = "output.fileUploaded",
-        fluidRow(
-          column(
-            width = 12,
-            h3(
-              span("Original file:"),
-              downloadButton("download_original_file", "Download"),
-              hr()
+          ),
+          fluidRow(
+            column(
+              width = 12,
+              conditionalPanel(
+                condition = "output.fileUploaded",
+                fluidRow(
+                  column(
+                    width = 12,
+                    h3(
+                      span("Original file:"),
+                      downloadButton("download_original_file", "Download"),
+                      hr()
+                    )
+                  )
+                ),
+                fluidRow(
+                  column(
+                    width = 12,
+                    h3("Validation summary:"),
+                    uiOutput("summary")
+                  )
+                )
+              )
             )
           )
         ),
-        fluidRow(
-          column(
-            width = 12,
-            h3("Validation summary:"),
-            uiOutput("summary"),
-            hr()
-          )
-        ),
-        fluidRow(
-          column(
-            width = 12,
-            h3(
-              span("Validation messages:"),
-              downloadButton("download_messages", "Download"),
-              hr()
-            ),
-            tabsetPanel(
-              id = "messages",
-              type = "tabs",
-              tabPanel(
-                icon = icon(lib = "glyphicon", name = "remove-sign"),
-                title = "Fatal errors", # uiOutput("tab_label_fatal"),
-                div(class="message_panel",
-                    dataTableOutput("fatal")
-                )
-              ),
-              tabPanel(
-                icon = icon(lib = "glyphicon", name = "exclamation-sign"),
-                title = "Errors", # uiOutput("tab_label_error"),
-                div(class="message_panel",
-                    dataTableOutput("error")
-                )
-              ),
-              tabPanel(
-                icon = icon(lib = "glyphicon", name = "warning-sign"),
-                title = "Warnings", # uiOutput("tab_label_warn"),
-                div(class="message_panel",
-                    dataTableOutput("warn")
-                )
-              ),
-              tabPanel(
-                icon = icon(lib = "glyphicon", name = "info-sign"),
-                title = "Info messages", #uiOutput("tab_label_info"),
-                #uiOutput("info", inline = TRUE)
-                div(class="message_panel",
-                  dataTableOutput("info")
+        column(
+          width = 8,
+          conditionalPanel(
+            condition = "output.fileUploaded",
+            fluidRow(
+              column(
+                width = 12,
+                h3(
+                  span("Validation messages:"),
+                ),
+                hr(),
+                h3(
+                  downloadButton("download_messages", "Download"),
+                  span("all messages"),
+                ),
+                hr(),
+                tabsetPanel(
+                  id = "messages",
+                  type = "tabs",
+                  tabPanel(
+                    icon = icon(lib = "glyphicon", name = "remove-sign"),
+                    title = "Fatal errors", # uiOutput("tab_label_fatal"),
+                    div(class="message_panel",
+                        dataTableOutput("fatal")
+                    )
+                  ),
+                  tabPanel(
+                    icon = icon(lib = "glyphicon", name = "exclamation-sign"),
+                    title = "Errors", # uiOutput("tab_label_error"),
+                    div(class="message_panel",
+                        dataTableOutput("error")
+                    )
+                  ),
+                  tabPanel(
+                    icon = icon(lib = "glyphicon", name = "warning-sign"),
+                    title = "Warnings", # uiOutput("tab_label_warn"),
+                    div(class="message_panel",
+                        dataTableOutput("warn")
+                    )
+                  ),
+                  tabPanel(
+                    icon = icon(lib = "glyphicon", name = "info-sign"),
+                    title = "Info messages", #uiOutput("tab_label_info"),
+                    #uiOutput("info", inline = TRUE)
+                    div(class="message_panel",
+                        dataTableOutput("info")
+                    )
+                  )
                 )
               )
             )
