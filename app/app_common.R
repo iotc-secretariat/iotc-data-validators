@@ -198,7 +198,11 @@ common_server = function(form_name, form_class, input, output, session) {
 
       shinycssloaders::showPageSpinner(caption = "Processing file content...")
       
-      validation_summary(form)
+      result = validation_summary(form)
+      
+      print(result)
+      
+      return(result)
     }
   })
 
@@ -224,8 +228,7 @@ common_server = function(form_name, form_class, input, output, session) {
 
   output$summary = renderUI({
     response = req(parse_file(), cancelOutput = TRUE)
-    
-    
+
     shinycssloaders::hidePageSpinner()
     
     return(
@@ -265,7 +268,7 @@ common_server = function(form_name, form_class, input, output, session) {
     },
     content  = function(file_name) {
       messages = req(parse_file(), cancelOutput = TRUE)$validation_messages
-
+     
       messages$LEVEL = factor(
         messages$LEVEL,
         levels = c("FATAL", "ERROR", "WARN", "INFO"),

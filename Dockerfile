@@ -75,9 +75,10 @@ RUN echo DEFAULT_IOTC_DB_SERVER=$DB_server    >  /home/shiny/.Renviron && \
     echo IOTCSTATISTICS_PASSWORD=$DB_password >> /home/shiny/.Renviron && \
     echo WP_CE_RAISED_USER=$DB_user           >> /home/shiny/.Renviron && \
     echo WP_CE_RAISED_PASSWORD=$DB_password   >> /home/shiny/.Renviron && \
+    echo SHINY_LOG_LEVEL=TRACE                >> /home/shiny/.Renviron && \
     chown shiny.shiny /home/shiny/.Renviron
 
-COPY ./app/shiny-server.conf /etc/shiny-server
+#COPY ./app/shiny-server.conf /etc/shiny-server
 
 # User running the Shiny server
 USER shiny
