@@ -12,4 +12,4 @@ install_bitbucket("iotc-ws/workflow",                 dependencies = TRUE, ref =
 
 install_github("daattali/shinycssloaders") # Necessary to download the latest (development) version of this lib
 
-q(save = "no") #
+q(save = "no")

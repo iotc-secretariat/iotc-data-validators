@@ -2,12 +2,15 @@ library(shiny)
 library(shinyjs)
 library(shinyWidgets)
 library(shinycssloaders)
+library(DT)
 
 library(iotc.data.common.workflow.legacy)
 
+#shiny::devmode(TRUE)
+
 filter_messages = function(response, level) {
   return(
-    response$validation_messages[LEVEL == level][, .(Sheet = SOURCE, Row = ROW, Col = COLUMN, Message = TEXT)]
+    response$validation_messages[LEVEL == level][, .(Sheet = SOURCE, Column = COLUMN, Row = ROW, Message = TEXT)]
   )
 }
 
@@ -200,8 +203,6 @@ common_server = function(form_name, form_class, input, output, session) {
       
       result = validation_summary(form)
       
-      print(result)
-      
       return(result)
     }
   })
@@ -293,98 +294,54 @@ common_server = function(form_name, form_class, input, output, session) {
     }
   )
   
-  default_column_defs = list(list(width = "128px", targets = c(0)),
-                             list(width = "64px" , targets = 1:2),
-                             list(className = "dt-right" , targets = 1:2))
+  default_column_defs = list(list(visible = FALSE, targets = c(0)),
+                             list(width = "92px", targets = c(1)),
+                             list(width = "64px", targets = 2:3),
+                             list(className = "dt-right" , targets = 2:3))
+  
+  default_dt_options = list(
+    columnDefs = default_column_defs,
+    selection = "none"
+  )
 
-  # Unused
-  output$tab_label_info = renderText({
-    INFO = info_messages(req(parse_file(), cancelOutput = TRUE))
-
-    return(paste0("Info messages (", nrow(INFO), ")"))
-  })
-
-  # Unused
-  output$info_temp = renderUI({
-    INFO = info_messages(req(parse_file(), cancelOutput = TRUE))
-
-    span_tags = ""
-
-    for(i in 1:nrow(INFO))
-      span_tags = paste0(span_tags, render_message(INFO[i], "INFO"))
-
-    return(HTML(span_tags))
-  })
-
-  output$info = renderDataTable({
+  output$info = DT::renderDataTable({
       return(info_messages(req(parse_file(), cancelOutput = TRUE)))
     }, 
-    options = list(
-      autoWidth = TRUE,
-      columnDefs = default_column_defs
-    )
+    options = default_dt_options
   )
 
   output$has_info_messages = reactive({
     return(nrow(info_messages(req(parse_file(), cancelOutput = TRUE)) > 0))
   })
 
-  # Unused
-  output$tab_label_warn = renderText({
-    WARN = warn_messages(req(parse_file(), cancelOutput = TRUE))
-
-    return(paste0("Warnings (", nrow(WARN), ")"))
-  })
-
-  output$warn = renderDataTable({
+  output$warn = DT::renderDataTable({
       return(warn_messages(req(parse_file(), cancelOutput = TRUE)))
     }, 
-    options = list(
-      autoWidth = TRUE,
-      columnDefs = default_column_defs
-    )
+    options = default_dt_options
   )
   
   output$has_warn_messages = reactive({
     return(nrow(warn_messages(req(parse_file(), cancelOutput = TRUE)) > 0))
   })
 
-  # Unused
-  output$tab_label_error = renderText({
-    ERROR = error_messages(req(parse_file(), cancelOutput = TRUE))
-
-    return(paste0("Errors (", nrow(ERROR), ")"))
-  })
-
-  output$error = renderDataTable({
+  output$error = DT::renderDataTable({
       return(error_messages(req(parse_file(), cancelOutput = TRUE)))
-    }, options = list(
-      autoWidth = TRUE,
-      columnDefs = default_column_defs
-    )
+    }, 
+    options = default_dt_options
   )
 
   output$has_error_messages = reactive({
     return(nrow(error_messages(req(parse_file(), cancelOutput = TRUE)) > 0))
   })
 
-  # Unused
-  output$tab_label_fatal = renderText({
-    FATAL = fatal_messages(req(parse_file(), cancelOutput = TRUE))
-
-    return(paste0("Fatal errors (", nrow(FATAL), ")"))
-  })
-
   output$has_fatal_messages = reactive({
     return(nrow(fatal_messages(req(parse_file(), cancelOutput = TRUE)) > 0))
   })
 
-  output$fatal = renderDataTable({
+  output$fatal = DT::renderDataTable({
       return(fatal_messages(req(parse_file(), cancelOutput = TRUE)))
-    }, options = list(
-      autoWidth = TRUE,
-      columnDefs = default_column_defs
-    )
+    }, 
+    options = default_dt_options
   )
 
   observe({

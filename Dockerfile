@@ -1,4 +1,4 @@
-FROM rocker/shiny:4.1.2
+FROM rocker/shiny:4.3.0
 
 # Environment variables
 
@@ -55,6 +55,9 @@ RUN install2.r --error --skipinstalled \
     stringi \
     stringr
 
+RUN install2.r --error --skipinstalled \
+    DT
+
 # Copies the app sources
 
 RUN rm -rf /srv/shiny-server/*
@@ -78,7 +81,10 @@ RUN echo DEFAULT_IOTC_DB_SERVER=$DB_server    >  /home/shiny/.Renviron && \
     echo SHINY_LOG_LEVEL=TRACE                >> /home/shiny/.Renviron && \
     chown shiny.shiny /home/shiny/.Renviron
 
-#COPY ./app/shiny-server.conf /etc/shiny-server
+COPY ./app/shiny-server.conf /etc/shiny-server
+
+RUN echo "shiny:pass" | chpasswd
+RUN adduser shiny sudo
 
 # User running the Shiny server
 USER shiny
