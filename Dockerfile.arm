@@ -1,0 +1,55 @@
+#FROM rocker/shiny:4.1.2
+FROM hvalev/shiny-server-arm:latest
+
+ARG BB_user
+ARG BB_password
+
+# Environment variables
+
+ENV _R_SHLIB_STRIP_=true
+ENV BITBUCKET_USER=$BB_user
+ENV BITBUCKET_PASSWORD=$BB_password
+
+# Updates local packages
+
+RUN apt-get update
+RUN apt-get -y install apt-utils
+
+# Required to build R package dependencies
+
+RUN apt-get -y install libharfbuzz-dev
+RUN apt-get -y install libfribidi-dev
+RUN apt-get -y install libgit2-dev
+RUN apt-get -y install libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev
+
+WORKDIR /
+
+# Copies the app sources
+
+RUN rm -rf /srv/shiny-server/*
+COPY ./app /srv/shiny-server/validator
+
+# Installs R packages
+
+RUN R -e "install.packages(c('bslib', 'cachem', 'commonmark', 'crayon', 'data.table', 'devtools', 'digest', 'fastmap', 'fontawesome', 'fs', 'glue', 'httpuv', 'jsonlite', 'later', 'magrittr', 'openxlsx', 'Rcpp', 'remotes', 'sass', 'shiny', 'shinyjs', 'shinyWidgets', 'sourcetools', 'stringi', 'stringr', 'DT'), repos = 'http://cran.us.r-project.org')"
+
+# Runs the "update_IOTC_deps.R" script, to install / update the IOTC dependencies
+
+RUN Rscript /srv/shiny-server/validator/update_IOTC_deps.R
+
+RUN echo SHINY_LOG_LEVEL=TRACE >> /home/shiny/.Renviron && \
+    chown shiny.shiny /home/shiny/.Renviron
+
+COPY ./app/shiny-server.conf /etc/shiny-server
+
+RUN echo "shiny:pass" | chpasswd
+RUN adduser shiny sudo
+
+# User running the Shiny server
+USER shiny
+
+# TCP/IP Port
+EXPOSE 3838
+
+# Starts Shiny
+CMD ["/usr/bin/shiny-server"]
