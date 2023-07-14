@@ -5,6 +5,13 @@ library(shinycssloaders)
 library(DT)
 
 library(iotc.data.common.workflow.legacy)
+library(openxlsx)
+
+SOURCE_CODES = as.data.table(read.xlsx("../IOTDB_codes.xlsx", sheet = "SOURCES"))
+SOURCE_CODES = as.list(setNames(SOURCE_CODES$CODE, paste0(SOURCE_CODES$CODE, " - ", SOURCE_CODES$NAME_EN)))
+
+QUALITY_CODES = as.data.table(read.xlsx("../IOTDB_codes.xlsx", sheet = "QUALITY"))
+QUALITY_CODES = as.list(setNames(QUALITY_CODES$CODE, paste0(QUALITY_CODES$CODE, " - ", QUALITY_CODES$NAME_EN)))
 
 #shiny::devmode(TRUE)
 
@@ -89,6 +96,20 @@ common_ui = function(form_name, form_class) {
           ),
           fluidRow(
             column(
+              width = 6,
+              selectizeInput("source", "Data source:",
+                             choices = SOURCE_CODES, selected = "LO", multiple = FALSE
+              )
+            ),
+            column(
+              width = 6,
+              selectizeInput("quality", "Data quality:", 
+                             choices = QUALITY_CODES, selected = "FAIR", multiple = FALSE
+              )
+            )
+          ),
+          fluidRow(
+            column(
               width = 12,
               conditionalPanel(
                 condition = "output.fileUploaded",
@@ -138,18 +159,33 @@ common_ui = function(form_name, form_class) {
                   type = "tabs",
                   tabPanel(
                     #icon = icon(lib = "glyphicon", name = "remove-sign"),
-                    title = "Data",
-                    dataTableOutput("data")
+                    title = "Extracted data",
+                    div(
+                      h3(
+                        downloadButton("download_extracted_data", "Download")
+                      ),
+                      dataTableOutput("data")
+                    )
                   ),
                   tabPanel(
                     #icon = icon(lib = "glyphicon", name = "exclamation-sign"),
-                    title = "Data (wide)", # uiOutput("tab_label_error"),
-                    dataTableOutput("data_wide")
+                    title = "Extracted data (wide)", # uiOutput("tab_label_error"),
+                    div(
+                      h3(
+                        downloadButton("download_extracted_data_wide", "Download")
+                      ),
+                      dataTableOutput("data_wide")
+                    )
                   ),
                   tabPanel(
                     #icon = icon(lib = "glyphicon", name = "exclamation-sign"),
-                    title = "Data (IOTDB)", # uiOutput("tab_label_error"),
-                    dataTableOutput("data_IOTDB")
+                    title = "Data (for IOTDB)", # uiOutput("tab_label_error"),
+                    div(
+                      h3(
+                        downloadButton("download_extracted_data_IOTDB", "Download")
+                      ),
+                      dataTableOutput("data_IOTDB")
+                    )
                   )
                 )
               )
@@ -175,7 +211,7 @@ common_server = function(form_name, form_class, processing_function, input, outp
       validation  = validation_summary(form)
       data        = extract_output(form, FALSE) # wide = FALSE
       data_wide   = extract_output(form, TRUE)  # wide = FALSE
-      data_IOTDB  = processing_function(data, "LO", "FAIR")
+      data_IOTDB  = processing_function(data, input$source, input$quality)
 
       return(
         list(
@@ -249,8 +285,8 @@ common_server = function(form_name, form_class, processing_function, input, outp
       )
     },
     content  = function(file_name) {
-      messages = req(parse_file(), cancelOutput = TRUE)$response$validation_messages
-
+      messages = req(parse_file(), cancelOutput = TRUE)$validation$validation_messages
+      
       messages$LEVEL = factor(
         messages$LEVEL,
         levels = c("FATAL", "ERROR", "WARN", "INFO"),
@@ -270,6 +306,67 @@ common_server = function(form_name, form_class, processing_function, input, outp
       write.csv(
         messages,
         row.names = FALSE,
+        na = "",
+        file_name
+      )
+    }
+  )
+  
+  output$download_extracted_data = downloadHandler(
+    filename = function() {
+      return(
+        str_replace_all(input$IOTC_form,
+                        "\\.xlsx$",
+                        replacement = "_extracted_data.csv")
+      )
+    },
+    content  = function(file_name) {
+      extracted_data = req(parse_file(), cancelOutput = TRUE)$data
+      
+      write.csv(
+        extracted_data,
+        row.names = FALSE,
+        na = "",
+        file_name
+      )
+    }
+  )
+  
+  output$download_extracted_data_wide = downloadHandler(
+    filename = function() {
+      return(
+        str_replace_all(input$IOTC_form,
+                        "\\.xlsx$",
+                        replacement = "_extracted_data_wide.csv")
+      )
+    },
+    content  = function(file_name) {
+      extracted_data = req(parse_file(), cancelOutput = TRUE)$data_wide
+      
+      write.csv(
+        extracted_data,
+        row.names = FALSE,
+        na = "",
+        file_name
+      )
+    }
+  )
+  
+  output$download_extracted_data_IOTDB = downloadHandler(
+    filename = function() {
+      return(
+        str_replace_all(input$IOTC_form,
+                        "\\.xlsx$",
+                        replacement = "_extracted_data_IOTDB.csv")
+      )
+    },
+    content  = function(file_name) {
+      extracted_data = req(parse_file(), cancelOutput = TRUE)$data_IOTDB
+      
+      write.csv(
+        extracted_data,
+        row.names = FALSE,
+        na = "",
         file_name
       )
     }
