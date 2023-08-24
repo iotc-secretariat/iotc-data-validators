@@ -189,6 +189,9 @@ common_ui = function(form_name, form_class) {
 }
 
 common_server = function(form_name, form_class, input, output, session) {
+  # Updates the maximum uploadable file size to 64MB (instead of the 5MB default value)
+  options(shiny.maxRequestSize = 64 * 1024^2)
+  
   parse_file = reactive({
     if(length(input$IOTC_form) != 0) {
       #print((input$IOTC_form)$datapath)
