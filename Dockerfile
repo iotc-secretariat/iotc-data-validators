@@ -36,7 +36,7 @@ RUN install2.r --error --skipinstalled \
     data.table \
     devtools \
     digest \
-    DT
+    DT \
     fastmap \
     fontawesome \
     fs \
