@@ -36,13 +36,17 @@ RUN install2.r --error --skipinstalled \
     data.table \
     devtools \
     digest \
+    DT
     fastmap \
     fontawesome \
     fs \
+    generics \
     glue \
+    htmltools \
     httpuv \
     jsonlite \
     later \
+    lubridate
     magrittr \
     openxlsx \
     Rcpp \
@@ -53,10 +57,10 @@ RUN install2.r --error --skipinstalled \
     shinyWidgets \
     sourcetools \
     stringi \
-    stringr
-
-RUN install2.r --error --skipinstalled \
-    DT
+    stringr \
+    timechange \
+    vctrs \
+    withr
 
 # Copies the app sources
 
