@@ -1,2 +1,2 @@
 # Builds the IOTC data validator UI for ARM machines, for which the rocker/shiny image cannot be used...
-docker build --build-arg BB_user=%BITBUCKET_USER% --build-arg BB_password=%BITBUCKET_PASSWORD% -t iotc/validator-ui-arm:legacy -f Dockerfile.arm --progress=plain . 
+docker build --build-arg BB_user=%BITBUCKET_USER% --build-arg BB_password=%BITBUCKET_PASSWORD% -t iotc/validator-ui-arm:interim -f Dockerfile.arm --progress=plain . 
