@@ -4,7 +4,7 @@ library(shinyWidgets)
 library(shinycssloaders)
 library(DT)
 
-library(iotc.data.common.workflow.legacy)
+library(iotc.data.common.workflow.interim)
 library(openxlsx)
 
 SOURCE_CODES = as.data.table(read.xlsx("../IOTDB_codes.xlsx", sheet = "SOURCES"))

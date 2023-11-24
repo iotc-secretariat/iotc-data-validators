@@ -4,7 +4,7 @@ library(shinyWidgets)
 library(shinycssloaders)
 library(DT)
 
-library(iotc.data.common.workflow.legacy)
+library(iotc.data.common.workflow.interim)
 
 #shiny::devmode(TRUE)
 
