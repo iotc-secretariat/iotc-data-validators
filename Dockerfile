@@ -46,7 +46,7 @@ RUN install2.r --error --skipinstalled \
     httpuv \
     jsonlite \
     later \
-    lubridate
+    lubridate \
     magrittr \
     openxlsx \
     Rcpp \
