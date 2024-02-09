@@ -4,7 +4,7 @@ library(shinyWidgets)
 library(shinycssloaders)
 library(DT)
 
-library(iotc.data.common.workflow.interim)
+library(iotc.base.form.management.interim)
 
 #shiny::devmode(TRUE)
 
@@ -78,7 +78,7 @@ common_ui = function(form_name, form_class) {
         column(
           width = 12,
           h2(
-            img(src = "iotc-logo.png", height = "96px"), 
+            img(src = "iotc-logo.png", height = "96px"),
             span(paste("IOTC", form_name, "data validation and analysis"))
           )
         )
@@ -191,21 +191,21 @@ common_ui = function(form_name, form_class) {
 common_server = function(form_name, form_class, input, output, session) {
   # Updates the maximum uploadable file size to 64MB (instead of the 5MB default value)
   options(shiny.maxRequestSize = 64 * 1024^2)
-  
+
   parse_file = reactive({
     if(length(input$IOTC_form) != 0) {
       #print((input$IOTC_form)$datapath)
 
       form =
-        new(form_class, 
+        new(form_class,
             path_to_file  = input$IOTC_form$datapath,
             original_name = input$IOTC_form$name
         )
 
       shinycssloaders::showPageSpinner(caption = "Processing file content...")
-      
+
       result = validation_summary(form)
-      
+
       return(result)
     }
   })
@@ -234,7 +234,7 @@ common_server = function(form_name, form_class, input, output, session) {
     response = req(parse_file(), cancelOutput = TRUE)
 
     shinycssloaders::hidePageSpinner()
-    
+
     return(
       shinyWidgets::alert(
         status = ifelse(!response$can_be_processed, "danger",
@@ -251,7 +251,7 @@ common_server = function(form_name, form_class, input, output, session) {
       )
     )
   })
-  
+
   output$download_original_file = downloadHandler(
     filename = function() {
       return(input$IOTC_form$name)
@@ -272,7 +272,7 @@ common_server = function(form_name, form_class, input, output, session) {
     },
     content  = function(file_name) {
       messages = req(parse_file(), cancelOutput = TRUE)$validation_messages
-     
+
       messages$LEVEL = factor(
         messages$LEVEL,
         levels = c("FATAL", "ERROR", "WARN", "INFO"),
@@ -296,12 +296,12 @@ common_server = function(form_name, form_class, input, output, session) {
       )
     }
   )
-  
+
   default_column_defs = list(list(visible = FALSE, targets = c(0)),
                              list(width = "92px", targets = c(1)),
                              list(width = "64px", targets = 2:3),
                              list(className = "dt-right" , targets = 2:3))
-  
+
   default_dt_options = list(
     columnDefs = default_column_defs,
     selection = "none"
@@ -309,7 +309,7 @@ common_server = function(form_name, form_class, input, output, session) {
 
   output$info = DT::renderDataTable({
       return(info_messages(req(parse_file(), cancelOutput = TRUE)))
-    }, 
+    },
     options = default_dt_options
   )
 
@@ -319,17 +319,17 @@ common_server = function(form_name, form_class, input, output, session) {
 
   output$warn = DT::renderDataTable({
       return(warn_messages(req(parse_file(), cancelOutput = TRUE)))
-    }, 
+    },
     options = default_dt_options
   )
-  
+
   output$has_warn_messages = reactive({
     return(nrow(warn_messages(req(parse_file(), cancelOutput = TRUE)) > 0))
   })
 
   output$error = DT::renderDataTable({
       return(error_messages(req(parse_file(), cancelOutput = TRUE)))
-    }, 
+    },
     options = default_dt_options
   )
 
@@ -343,7 +343,7 @@ common_server = function(form_name, form_class, input, output, session) {
 
   output$fatal = DT::renderDataTable({
       return(fatal_messages(req(parse_file(), cancelOutput = TRUE)))
-    }, 
+    },
     options = default_dt_options
   )
 
