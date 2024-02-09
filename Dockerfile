@@ -62,6 +62,14 @@ RUN install2.r --error --skipinstalled \
     vctrs \
     withr
 
+RUN install2.r --error --skipinstalled \
+    cli \
+    cpp11 \
+    lifecycle \
+    promises \
+    rlang \
+    zip
+
 # Copies the app sources
 
 RUN rm -rf /srv/shiny-server/*
