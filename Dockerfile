@@ -9,6 +9,9 @@ ARG BB_password
 
 WORKDIR /
 
+RUN mkdir -p /R/lib
+ENV R_LIBS_USER /R/lib
+
 # Installs R packages
 
 RUN install2.r --error --skipinstalled \
@@ -73,6 +76,7 @@ COPY ./app/shiny-server.conf /etc/shiny-server
 
 RUN echo "shiny:pass" | chpasswd
 RUN adduser shiny sudo
+RUN adduser shiny staff
 
 # User running the Shiny server
 USER shiny
