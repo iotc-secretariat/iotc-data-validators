@@ -24,6 +24,9 @@ RUN apt-get -y install libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev
 
 WORKDIR /
 
+RUN mkdir -p /R/lib
+ENV R_LIBS_USER /R/lib
+
 # Copies the app sources
 
 RUN rm -rf /srv/shiny-server/*

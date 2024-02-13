@@ -9,6 +9,9 @@ ARG BB_password
 
 WORKDIR /
 
+RUN mkdir -p /R/lib
+ENV R_LIBS_USER /R/lib
+
 # Installs R packages
 
 RUN install2.r --error --skipinstalled \
