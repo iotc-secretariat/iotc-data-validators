@@ -215,7 +215,7 @@ common_server = function(form_name, form_class, processing_function, input, outp
       data        = extract_output(form, FALSE) # wide = FALSE
       data_wide   = extract_output(form, TRUE)  # wide = FALSE
 
-      if(is.na(processing_function))
+      if(is.null(processing_function))
         data_IOTDB  = NA
       else
         data_IOTDB = processing_function(data, input$source, input$quality)
