@@ -5,7 +5,6 @@ library(shinycssloaders)
 library(DT)
 
 library(iotc.base.form.management.interim)
-
 library(openxlsx)
 
 SOURCE_CODES = as.data.table(read.xlsx("../IOTDB_codes.xlsx", sheet = "SOURCES"))
