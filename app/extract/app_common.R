@@ -212,13 +212,32 @@ common_server = function(form_name, form_class, processing_function, input, outp
       shinycssloaders::showPageSpinner(caption = "Processing file content...")
 
       validation  = validation_summary(form)
-      data        = extract_output(form, FALSE) # wide = FALSE
-      data_wide   = extract_output(form, TRUE)  # wide = FALSE
+      data        = extract_output(form, FALSE)
+      data_wide   = extract_output(form, TRUE)
 
-      if(is.null(processing_function))
-        data_IOTDB  = NA
-      else
-        data_IOTDB = processing_function(data, input$source, input$quality)
+      data = data.table()
+      data_wide = data.table()
+      data_IOTDB = data.table()
+
+      tryCatch({
+        data = extract_output(form, wide = FALSE)
+      }, error = function(cond) {
+        print(cond)
+      })
+
+      tryCatch({
+        data_wide = extract_output(form, wide = TRUE)
+      }, error = function(cond) {
+        print(cond)
+      })
+
+      if(!is.null(processing_function)) {
+        tryCatch({
+          data_IOTDB  = processing_function(data, input$source, input$quality)
+        }, error = function(cond) {
+          print(cond)
+        })
+      }
 
       return(
         list(
