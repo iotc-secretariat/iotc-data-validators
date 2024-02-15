@@ -212,8 +212,6 @@ common_server = function(form_name, form_class, processing_function, input, outp
       shinycssloaders::showPageSpinner(caption = "Processing file content...")
 
       validation  = validation_summary(form)
-      data        = extract_output(form, FALSE)
-      data_wide   = extract_output(form, TRUE)
 
       data = data.table()
       data_wide = data.table()
