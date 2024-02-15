@@ -4,7 +4,8 @@ library(shinyWidgets)
 library(shinycssloaders)
 library(DT)
 
-library(iotc.data.common.workflow.interim)
+library(iotc.base.form.management.interim)
+
 library(openxlsx)
 
 SOURCE_CODES = as.data.table(read.xlsx("../IOTDB_codes.xlsx", sheet = "SOURCES"))
@@ -103,7 +104,7 @@ common_ui = function(form_name, form_class) {
             ),
             column(
               width = 6,
-              selectizeInput("quality", "Data quality:", 
+              selectizeInput("quality", "Data quality:",
                              choices = QUALITY_CODES, selected = "FAIR", multiple = FALSE
               )
             )
@@ -200,7 +201,7 @@ common_ui = function(form_name, form_class) {
 common_server = function(form_name, form_class, processing_function, input, output, session) {
   # Updates the maximum uploadable file size to 64MB (instead of the 5MB default value)
   options(shiny.maxRequestSize = 64 * 1024^2)
-  
+
   parse_file = reactive({
     if(length(input$IOTC_form) != 0) {
       form =
@@ -212,9 +213,10 @@ common_server = function(form_name, form_class, processing_function, input, outp
       shinycssloaders::showPageSpinner(caption = "Processing file content...")
 
       validation  = validation_summary(form)
-      data        = extract_output(form, FALSE) # wide = FALSE
-      data_wide   = extract_output(form, TRUE)  # wide = FALSE
-      data_IOTDB  = processing_function(data, input$source, input$quality)
+
+      data        = extract_output(form, wide = FALSE)
+      data_wide   = extract_output(form, wide = TRUE)
+      data_IOTDB  = ifelse(is.na(processing_function), NA, processing_function(data, input$source, input$quality))
 
       return(
         list(
@@ -289,7 +291,7 @@ common_server = function(form_name, form_class, processing_function, input, outp
     },
     content  = function(file_name) {
       messages = req(parse_file(), cancelOutput = TRUE)$validation$validation_messages
-      
+
       messages$LEVEL = factor(
         messages$LEVEL,
         levels = c("FATAL", "ERROR", "WARN", "INFO"),
@@ -314,7 +316,7 @@ common_server = function(form_name, form_class, processing_function, input, outp
       )
     }
   )
-  
+
   output$download_extracted_data = downloadHandler(
     filename = function() {
       return(
@@ -325,7 +327,7 @@ common_server = function(form_name, form_class, processing_function, input, outp
     },
     content  = function(file_name) {
       extracted_data = req(parse_file(), cancelOutput = TRUE)$data
-      
+
       write.csv(
         extracted_data,
         row.names = FALSE,
@@ -334,7 +336,7 @@ common_server = function(form_name, form_class, processing_function, input, outp
       )
     }
   )
-  
+
   output$download_extracted_data_wide = downloadHandler(
     filename = function() {
       return(
@@ -345,7 +347,7 @@ common_server = function(form_name, form_class, processing_function, input, outp
     },
     content  = function(file_name) {
       extracted_data = req(parse_file(), cancelOutput = TRUE)$data_wide
-      
+
       write.csv(
         extracted_data,
         row.names = FALSE,
@@ -354,7 +356,7 @@ common_server = function(form_name, form_class, processing_function, input, outp
       )
     }
   )
-  
+
   output$download_extracted_data_IOTDB = downloadHandler(
     filename = function() {
       return(
@@ -365,7 +367,7 @@ common_server = function(form_name, form_class, processing_function, input, outp
     },
     content  = function(file_name) {
       extracted_data = req(parse_file(), cancelOutput = TRUE)$data_IOTDB
-      
+
       write.csv(
         extracted_data,
         row.names = FALSE,
