@@ -9,7 +9,7 @@ options(download.file.method = "libcurl")
 install_bitbucket("iotc-ws/core-utils-misc",          dependencies = TRUE)
 install_bitbucket("iotc-ws/core-db-connections",      dependencies = TRUE)
 install_bitbucket("iotc-ws/iotc-reference-codelists", dependencies = TRUE)
-install_bitbucket("iotc-ws/base-form-management",     dependencies = TRUE)
+install_bitbucket("iotc-ws/base-form-management",     dependencies = FALSE)
 
 install_github("daattali/shinycssloaders") # Necessary to download the latest (development) version of this lib
 
