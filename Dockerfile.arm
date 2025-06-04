@@ -1,14 +1,9 @@
 #FROM rocker/shiny:4.1.2
 FROM hvalev/shiny-server-arm:latest
 
-ARG BB_user
-ARG BB_password
-
 # Environment variables
 
 ENV _R_SHLIB_STRIP_=true
-ENV BITBUCKET_USER=$BB_user
-ENV BITBUCKET_PASSWORD=$BB_password
 
 # Updates local packages
 
@@ -34,7 +29,7 @@ COPY ./app /srv/shiny-server/validator
 
 # Installs R packages
 
-RUN R -e "install.packages(c('bslib', 'cachem', 'commonmark', 'crayon', 'data.table', 'devtools', 'digest', 'fastmap', 'fontawesome', 'fs', 'glue', 'httpuv', 'jsonlite', 'later', 'magrittr', 'openxlsx', 'Rcpp', 'remotes', 'sass', 'shiny', 'shinyjs', 'shinyWidgets', 'sourcetools', 'stringi', 'stringr', 'DT'), repos = 'http://cran.us.r-project.org')"
+RUN R -e "install.packages(c('bslib', 'cachem', 'commonmark', 'crayon', 'data.table', 'remotes', 'digest', 'fastmap', 'fontawesome', 'fs', 'glue', 'httpuv', 'jsonlite', 'later', 'magrittr', 'openxlsx', 'Rcpp', 'remotes', 'sass', 'shiny', 'shinyjs', 'shinyWidgets', 'sourcetools', 'stringi', 'stringr', 'DT'), repos = 'http://cran.us.r-project.org')"
 
 # Runs the "update_IOTC_deps.R" script, to install / update the IOTC dependencies
 

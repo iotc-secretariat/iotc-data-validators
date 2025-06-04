@@ -4,9 +4,6 @@ FROM rocker/shiny:4.1.2
 
 ENV _R_SHLIB_STRIP_=true
 
-ARG BB_user
-ARG BB_password
-
 WORKDIR /
 
 # Installs R packages
@@ -17,7 +14,7 @@ RUN install2.r --error --skipinstalled \
     commonmark \
     crayon \
     data.table \
-    devtools \
+    remotes \
     digest \
     DT \
     fastmap \
@@ -60,9 +57,6 @@ RUN rm -rf /srv/shiny-server/*
 COPY ./app /srv/shiny-server/validator
 
 # Runs the "update_IOTC_deps.R" script, to install / update the IOTC dependencies
-
-ENV BITBUCKET_USER=$BB_user
-ENV BITBUCKET_PASSWORD=$BB_password
 
 RUN Rscript /srv/shiny-server/validator/update_IOTC_deps.R
 
