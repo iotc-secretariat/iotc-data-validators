@@ -12,7 +12,7 @@ remotes::install_github("iotc-secretariat/iotc-lib-core-utils-misc", dependencie
 # install_bitbucket("iotc-ws/iotc-reference-codelists", dependencies = TRUE)
 remotes::install_github("iotc-secretariat/iotc-data-reference-codelists", dependencies = TRUE)
 # install_bitbucket("iotc-ws/base-form-management",     dependencies = FALSE)
-remotes::install_github("iotc-secretariat/iotc-base-form-management", dependencies = FALSE)
+remotes::install_github("iotc-secretariat/iotc-lib-base-form-management", dependencies = FALSE)
 
 remotes::install_github("daattali/shinycssloaders") # Necessary to download the latest (development) version of this lib
 
