@@ -3,12 +3,12 @@ name: docker-build-image
 on:
   push:
     branches:
-      - 'main'
+      - 'master'
     tags:
       - "*"
   pull_request:
     branches:
-      - 'main'
+      - 'master'
 
 env:
   CACHE_IMAGE: ghcr.io/iotc-secretariat/iotc-data-validators-cache
