@@ -7,6 +7,7 @@ library(DT)
 library(openxlsx)
 library(iotc.base.form.management)
 
+#options
 # Updates the maximum uploadable file size to 64MB (instead of the 5MB default value)
 options(shiny.maxRequestSize = 64 * 1024^2)
 
