@@ -38,7 +38,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
+          username: iotc-secretariat
           password: ${{ secrets.DOCKERSHINY_TOKEN }}
 
       - name: Set up Docker Buildx
