@@ -4,7 +4,11 @@ library(shinyjs)
 library(shinyWidgets)
 library(shinycssloaders)
 library(DT)
+library(data.table)
 library(openxlsx)
+library(stringr)
+library(iotc.core.utils.misc)
+library(iotc.data.reference.codelists)
 library(iotc.base.form.management)
 
 #options
