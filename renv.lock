@@ -962,22 +962,25 @@
       "Encoding": "UTF-8",
       "LazyData": "true",
       "Depends": [
+        "R (>= 4.5)"
+      ],
+      "Imports": [
         "data.table",
         "lubridate",
         "openxlsx",
         "stringr",
         "iotc.core.utils.misc",
-        "iotc.data.reference.codelists",
-        "R (>= 2.10)"
+        "iotc.data.reference.codelists"
       ],
-      "RoxygenNote": "7.3.1",
-      "Collate": "Message_class.R IOTC_form_class.R IOTC_form_RCDI_class.R IOTC_form_1DI_class.R IOTC_form_1RC_class.R IOTC_form_3BU_class.R IOTC_form_CESF_class.R IOTC_form_3CE_class.R IOTC_form_CESF_update_class.R IOTC_form_3CE_update_class.R IOTC_form_4SF_class.R IOTC_form_4SF_update_class.R constants.R data.R data_checks.R field_checks.R forms.R metadata.R reference_checks.R utilities.R utilities_export.R utilities_export_IOTDB.R validation_summary_helpers.R",
+      "Remotes": "iotc-secretariat/iotc-lib-core-utils-misc, iotc-secretariat/iotc-data-reference-codelists",
+      "RoxygenNote": "7.3.3",
+      "Collate": "'Message_class.R' 'IOTC_form_class.R' 'IOTC_form_RCDI_class.R' 'IOTC_form_1DI_class.R' 'IOTC_form_1RC_class.R' 'IOTC_form_3BU_class.R' 'IOTC_form_CESF_class.R' 'IOTC_form_3CE_class.R' 'IOTC_form_CESF_update_class.R' 'IOTC_form_3CE_update_class.R' 'IOTC_form_4SF_class.R' 'IOTC_form_4SF_update_class.R' 'constants.R' 'data.R' 'data_checks.R' 'field_checks.R' 'forms.R' 'iotc.base.form.management.R' 'metadata.R' 'reference_checks.R' 'utilities.R' 'utilities_export.R' 'utilities_export_IOTDB.R' 'validation_summary_helpers.R'",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "iotc-lib-base-form-management",
       "RemoteUsername": "iotc-secretariat",
       "RemoteRef": "HEAD",
-      "RemoteSha": "6c3cc9814a2b901cd1c3c1fcdf4479dbeb052cbe",
+      "RemoteSha": "91ba0db80d97228193aeaea8fe86d21adc13d5c9",
       "NeedsCompilation": "no"
     },
     "iotc.core.utils.misc": {
