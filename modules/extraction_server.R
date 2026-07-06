@@ -156,15 +156,12 @@ extraction_server <- function(id, activated){
             fluidRow(
               column(
                 width = 12,
-                conditionalPanel(
-                  condition = "output.fileUploaded",
-                  fluidRow(
-                    column(
-                      width = 12,
-                      h3(
-                        span("Original file:"),
-                        downloadButton("download_original_file", "Download")
-                      )
+                if(fileUploaded()) fluidRow(
+                  column(
+                    width = 12,
+                    h3(
+                      span("Original file:"),
+                      downloadButton("download_original_file", "Download")
                     )
                   )
                 )
@@ -173,8 +170,7 @@ extraction_server <- function(id, activated){
           ),
           column(
             width = 6,
-            conditionalPanel(
-              condition = "output.fileUploaded",
+            if(fileUploaded()) tagList(
               h3("Validation summary:"),
               hr(),
               uiOutput(ns("summary")),
@@ -194,43 +190,40 @@ extraction_server <- function(id, activated){
         fluidRow(
           column(
             width = 12,
-            conditionalPanel(
-              condition = "output.fileUploaded",
-              fluidRow(
-                column(
-                  width = 12,
-                  tabsetPanel(
-                    id = "processed_data",
-                    type = "tabs",
-                    tabPanel(
-                      #icon = icon(lib = "glyphicon", name = "remove-sign"),
-                      title = "Extracted data",
-                      div(
-                        h3(
-                          downloadButton("download_extracted_data", "Download")
-                        ),
-                        dataTableOutput("data")
-                      )
-                    ),
-                    tabPanel(
-                      #icon = icon(lib = "glyphicon", name = "exclamation-sign"),
-                      title = "Extracted data (wide)", # uiOutput("tab_label_error"),
-                      div(
-                        h3(
-                          downloadButton("download_extracted_data_wide", "Download")
-                        ),
-                        dataTableOutput("data_wide")
-                      )
-                    ),
-                    tabPanel(
-                      #icon = icon(lib = "glyphicon", name = "exclamation-sign"),
-                      title = "Data (for IOTDB)", # uiOutput("tab_label_error"),
-                      div(
-                        h3(
-                          downloadButton("download_extracted_data_IOTDB", "Download")
-                        ),
-                        dataTableOutput("data_IOTDB")
-                      )
+            if(fileUploaded()) fluidRow(
+              column(
+                width = 12,
+                tabsetPanel(
+                  id = "processed_data",
+                  type = "tabs",
+                  tabPanel(
+                    #icon = icon(lib = "glyphicon", name = "remove-sign"),
+                    title = "Extracted data",
+                    div(
+                      h3(
+                        downloadButton("download_extracted_data", "Download")
+                      ),
+                      dataTableOutput("data")
+                    )
+                  ),
+                  tabPanel(
+                    #icon = icon(lib = "glyphicon", name = "exclamation-sign"),
+                    title = "Extracted data (wide)", # uiOutput("tab_label_error"),
+                    div(
+                      h3(
+                        downloadButton("download_extracted_data_wide", "Download")
+                      ),
+                      dataTableOutput("data_wide")
+                    )
+                  ),
+                  tabPanel(
+                    #icon = icon(lib = "glyphicon", name = "exclamation-sign"),
+                    title = "Data (for IOTDB)", # uiOutput("tab_label_error"),
+                    div(
+                      h3(
+                        downloadButton("download_extracted_data_IOTDB", "Download")
+                      ),
+                      dataTableOutput("data_IOTDB")
                     )
                   )
                 )
@@ -296,7 +289,7 @@ extraction_server <- function(id, activated){
 #       return(!is.null(input$IOTC_form))
 #     })
 
-    outputOptions(output, 'fileUploaded', suspendWhenHidden = FALSE)
+    # outputOptions(output, 'fileUploaded', suspendWhenHidden = FALSE)
 
     output$uploaded_file_status = renderText({
       response = req(parse_file(), cancelOutput = TRUE)$validation
