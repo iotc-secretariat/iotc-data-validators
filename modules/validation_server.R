@@ -8,23 +8,27 @@ validation_server <- function(id, activated){
     #reactive
     form_class = reactiveVal(NULL)
     form_name = reactiveVal(NULL)
+    fileUploaded = reactiveVal(FALSE)
+    file_input_key = reactiveVal(0)
 
     #functions
     parse_file = reactive({
-      if(length(input$IOTC_form) != 0) {
-        #print((input$IOTC_form)$datapath)
+      if(length(input[[paste0("IOTC_form_", file_input_key())]]) != 0) {
 
         form =
           new(form_class(),
-              path_to_file  = input$IOTC_form$datapath,
-              original_name = input$IOTC_form$name
+              path_to_file  = input[[paste0("IOTC_form_", file_input_key())]]$datapath,
+              original_name = input[[paste0("IOTC_form_", file_input_key())]]$name
           )
 
         shinycssloaders::showPageSpinner(caption = "Processing file content...")
 
         result = validation_summary(form)
-
+        fileUploaded(!is.null(input[[paste0("IOTC_form_", file_input_key())]]))
         return(result)
+      }else{
+        fileUploaded(FALSE)
+        return(NULL)
       }
     })
 
@@ -88,17 +92,7 @@ validation_server <- function(id, activated){
                 width = 12,
                 h3(paste("Select the IOTC", form_name(), "to upload:")),
                 hr(),
-                div(
-                  class = "file_input",
-                  fileInput(
-                    inputId = ns("IOTC_form"), label = NULL,
-                    width = "100%",
-                    placeholder = paste("Choose a", form_name(), "file"),
-                    buttonLabel = icon(lib = "glyphicon", name = "folder-open"),
-                    multiple = FALSE,
-                    accept = c("application/msexcel", ".xlsx", ".xlsm")
-                  )
-                )
+                uiOutput(ns("file_input_ui"))
               )
             ),
             fluidRow(
@@ -182,6 +176,25 @@ validation_server <- function(id, activated){
       )
     })
 
+    output$file_input_ui <- renderUI({
+
+      key = file_input_key()
+
+      dynamic_id <- paste0("IOTC_form_", key)
+
+      div(
+        class = "file_input",
+        fileInput(
+          inputId = ns(dynamic_id), label = NULL,
+          width = "100%",
+          placeholder = paste("Choose a", form_name(), "file"),
+          buttonLabel = icon(lib = "glyphicon", name = "folder-open"),
+          multiple = FALSE,
+          accept = c("application/msexcel", ".xlsx", ".xlsm")
+        )
+      )
+    })
+
 
     #form type observer
     observeEvent(input$form_type,{
@@ -189,6 +202,9 @@ validation_server <- function(id, activated){
       form_class(input$form_type)
       form_name(names(IOTC_FORM_TYPES)[IOTC_FORM_TYPES == input$form_type])
       updateURL(session, sprintf("?module=validation&form=%s", input$form_type))
+
+      # Increment key to force re-render and reset
+      file_input_key(file_input_key() + 1)
     })
 
     #form type resolver
@@ -201,9 +217,9 @@ validation_server <- function(id, activated){
 
     # See: https://stackoverflow.com/questions/19686581/make-conditionalpanel-depend-on-files-uploaded-with-fileinput
 
-    fileUploaded = reactive({
-      return(!is.null(input$IOTC_form))
-    })
+    # fileUploaded = reactive({
+    #   return(!is.null(input$IOTC_form))
+    # })
 
     #outputOptions(output, 'fileUploaded', suspendWhenHidden = FALSE)
 
@@ -243,10 +259,10 @@ validation_server <- function(id, activated){
 
     output$download_original_file = downloadHandler(
       filename = function() {
-        return(input$IOTC_form$name)
+        return(input[[paste0("IOTC_form_", file_input_key())]]$name)
       },
       content  = function(file_name) {
-        file.copy(file.path(input$IOTC_form$datapath), file_name)
+        file.copy(file.path(input[[paste0("IOTC_form_", file_input_key())]]$datapath), file_name)
       },
       contentType = "application/vnd.ms-excel"
     )
@@ -254,7 +270,7 @@ validation_server <- function(id, activated){
     output$download_messages = downloadHandler(
       filename = function() {
         return(
-          str_replace_all(input$IOTC_form,
+          str_replace_all(input[[paste0("IOTC_form_", file_input_key())]],
                           "\\.xlsx$",
                           replacement = "_validation_messages.csv")
         )
@@ -368,6 +384,7 @@ validation_server <- function(id, activated){
         updateTabsetPanel(inputId = "messages", selected = "Fatal errors")
       }
     })
+
   })
 
 }
