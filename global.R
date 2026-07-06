@@ -26,15 +26,15 @@ IOTC_FORM_TYPES = setNames(
     "IOTCForm1DI",
     "IOTCForm1RC",
     "IOTCForm3BU",
-    "IOTCForm3CE", "IOTCForm3CEUpdate",
-    "IOTCForm4SF", "IOTCForm4SFUpdate"
+    "IOTCForm3CE",
+    "IOTCForm4SF"
   ),
   nm = c(
     "Form 1-DI",
     "Form 1-RC",
     "Form 3-BU",
-    "Form 3-CE", "Form 3-CE-update",
-    "Form 4-SF", "Form 4-SF-update"
+    "Form 3-CE",
+    "Form 4-SF"
   )
 )
 
