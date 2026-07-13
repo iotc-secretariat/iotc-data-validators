@@ -60,6 +60,12 @@ validation_server <- function(id, activated){
           }
         ")),
         fluidRow(
+          actionLink(inputId = "home", class="btn btn-secondary btn-sm", title="Click to go back to home",
+                     icon = icon("arrow-left"),
+                     label = "Back to Home"
+          )
+        ),
+        fluidRow(
           column(
             width = 12,
             h2(
@@ -195,6 +201,10 @@ validation_server <- function(id, activated){
       )
     })
 
+    observeEvent(input$home,{
+      react_module("home"); react_resolver(FALSE);
+      updateURL(session, "")
+    }, ignoreInit = T)
 
     #form type observer
     observeEvent(input$form_type,{
