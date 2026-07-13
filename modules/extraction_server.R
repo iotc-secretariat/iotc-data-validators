@@ -50,9 +50,8 @@ extraction_server <- function(id, activated){
         INFO("Process form data")
         if(!is.null(form_processor())) {
           tryCatch({
-            readr::write_csv(data, "data_3ce.csv")
-            readr::write_csv(data_wide, "data_3ce_wide.csv")
             data_IOTDB  = form_processor()(data, input$source, input$quality)
+            readr::write_csv(data_IOTDB, "test.csv")
           }, error = function(cond) {
             ERROR("Error while processing form data")
             print(cond)
@@ -161,7 +160,7 @@ extraction_server <- function(id, activated){
                     width = 12,
                     h3(
                       span("Original file:"),
-                      downloadButton("download_original_file", "Download")
+                      downloadButton(outputId = ns("download_original_file"), "Download")
                     )
                   )
                 )
@@ -175,7 +174,7 @@ extraction_server <- function(id, activated){
               hr(),
               uiOutput(ns("summary")),
               h3(
-                downloadButton("download_messages", "Download"),
+                downloadButton(outputId = ns("download_messages"), "Download"),
                 span("all validation messages")
               )
             )
@@ -201,7 +200,7 @@ extraction_server <- function(id, activated){
                     title = "Extracted data",
                     div(
                       h3(
-                        downloadButton("download_extracted_data", "Download")
+                        downloadButton(outputId = ns("download_extracted_data"), "Download")
                       ),
                       dataTableOutput("data")
                     )
@@ -211,7 +210,7 @@ extraction_server <- function(id, activated){
                     title = "Extracted data (wide)", # uiOutput("tab_label_error"),
                     div(
                       h3(
-                        downloadButton("download_extracted_data_wide", "Download")
+                        downloadButton(outputId = ns("download_extracted_data_wide"), "Download")
                       ),
                       dataTableOutput("data_wide")
                     )
@@ -221,7 +220,7 @@ extraction_server <- function(id, activated){
                     title = "Data (for IOTDB)", # uiOutput("tab_label_error"),
                     div(
                       h3(
-                        downloadButton("download_extracted_data_IOTDB", "Download")
+                        downloadButton(outputId = ns("download_extracted_data_IOTDB"), "Download")
                       ),
                       dataTableOutput("data_IOTDB")
                     )
