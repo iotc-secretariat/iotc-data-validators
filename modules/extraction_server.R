@@ -51,7 +51,6 @@ extraction_server <- function(id, activated){
         if(!is.null(form_processor())) {
           tryCatch({
             data_IOTDB  = form_processor()(data, input$source, input$quality)
-            readr::write_csv(data_IOTDB, "test.csv")
           }, error = function(cond) {
             ERROR("Error while processing form data")
             print(cond)
