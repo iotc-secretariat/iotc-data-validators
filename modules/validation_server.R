@@ -60,6 +60,12 @@ validation_server <- function(id, activated){
           }
         ")),
         fluidRow(
+          column = 12,
+          tags$div(class = "container-fluid",
+                   fao_header("IOTC data validators")
+          )
+        ),
+        fluidRow(
           actionLink(inputId = "home", class="btn btn-secondary btn-sm", title="Click to go back to home",
                      icon = icon("arrow-left"),
                      label = "Back to Home"
@@ -69,7 +75,7 @@ validation_server <- function(id, activated){
           column(
             width = 12,
             h2(
-              img(src = "iotc-logo.png", height = "96px"),
+              #img(src = "iotc-logo.png", height = "96px"),
               span(paste("IOTC data validation and analysis"))
             )
           )

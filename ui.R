@@ -1,9 +1,12 @@
 ui = shiny::tagList(
   tags$head(
-    tags$link(rel = "stylesheet", type = "text/css", href = "iotc-data-validators.css")
+    tags$link(rel = "stylesheet", type = "text/css", href = "fao-home.min.css"),
+    tags$link(rel = "stylesheet", type = "text/css", href = "fao-theme.min.css"),
+    tags$link(rel = "stylesheet", type = "text/css", href = "fao-adds.css")
   ),
   fluidPage(
     uiOutput("main_ui")
   ),
-  tags$footer(footer(getAppId(), getAppVersion(), getAppDate()), align = "center")
+  app_footer(getAppId(), getAppVersion(), getAppDate()),
+  fao_footer()
 )

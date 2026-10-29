@@ -42,6 +42,7 @@ IOTC_FORM_TYPES = setNames(
 source("./assets/scripts/package_utils.R")
 source("./assets/scripts/ui_utils.R")
 source("./assets/scripts/commons.R")
+source("./assets/scripts/common_fao.R")
 
 #modules
 source("./modules/validation_ui.R")

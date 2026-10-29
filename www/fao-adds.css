@@ -1,0 +1,16 @@
+.vertical-sep-header {
+  display:inline-flex;
+  align-items:center;
+  height:40px;
+  margin-left:10px;
+  padding-left:10px;
+  border-left:1px solid #ebecf0;
+}
+
+.vertical-sep-footer {
+  display:inline-flex;
+  align-items:center;
+  margin-left:5px;
+  padding-left:5px;
+  border-left:1px solid #ebecf0;
+}

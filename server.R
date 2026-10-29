@@ -8,13 +8,15 @@ server = function(input, output, session) {
 
   homeUI <- function(){
     tagList(
-      titlePanel(
-        windowTitle = "IOTC data validators - extract and validate data",
-        title = ""
+      fluidRow(
+        column = 12,
+        tags$div(class = "container-fluid",
+          fao_header("IOTC data validators")
+        )
       ),
       fluidRow(
         column = 12,
-        tags$div(class="container",
+        tags$div(class="container-fluid",
                  actionLink(inputId = "module_validation", class="btn btn-primary text-monospace button-link", title="Click to open validation module",
                             icon = icon("check"),
                             label = "VALIDATE"
@@ -30,18 +32,21 @@ server = function(input, output, session) {
 
   output$main_ui <- renderUI({
     DEBUG("Render MAIN UI")
-    switch(react_module(),
-           "home" = {
-             homeUI()
-           },
-           "extraction" = {
-             INFO("Load extraction module")
-             extraction_ui("extraction")
-           },
-           "validation" = {
-             INFO("Load validation module")
-             validation_ui("validation")
-           }
+    tags$div(
+      switch(react_module(),
+             "home" = {
+               homeUI()
+             },
+             "extraction" = {
+               INFO("Load extraction module")
+               extraction_ui("extraction")
+             },
+             "validation" = {
+               INFO("Load validation module")
+               validation_ui("validation")
+             }
+      ),
+      style = "min-height:750px;"
     )
   })
 
